@@ -8,15 +8,35 @@
 <body>
     <form action="{{ route('user.store') }}" method="POST">
         @csrf
+
         <label for="nama">Nama:</label>
-        <input type="text" id="nama" name="nama" required><br><br>
-        
+        <input type="text" id="nama" name="nama" value="{{ old('nama') }}" required>
+        @error('nama')
+            <p style="color: red;">{{ $message }}</p>
+        @enderror
+        <br><br>
+
         <label for="npm">NPM:</label>
-        <input type="text" id="npm" name="npm" required><br><br>
-        
+        <input type="text" id="npm" name="npm" value="{{ old('npm') }}" required>
+        @error('npm')
+            <p style="color: red;">{{ $message }}</p>
+        @enderror
+        <br><br>
+
         <label for="kelas">Kelas:</label>
-        <input type="text" id="kelas" name="kelas" required><br><br>
-        
+        <select id="kelas" name="kelas_id" required>
+            <option value="" disabled selected>Pilih Kelas</option>
+            @foreach($kelas as $k)
+                <option value="{{ $k->id }}" {{ old('kelas_id') == $k->id ? 'selected' : '' }}>
+                    {{ $k->nama_kelas }}
+                </option>
+            @endforeach
+        </select>
+        @error('kelas_id')
+            <p style="color: red;">{{ $message }}</p>
+        @enderror
+        <br><br>
+
         <button type="submit">Submit</button>
     </form>
 </body>
