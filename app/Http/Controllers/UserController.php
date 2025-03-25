@@ -8,6 +8,15 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public $userModel;
+    public $kelasModel;
+
+    public function __construct()
+    {
+        $this->userModel = new User();
+        $this->kelasModel = new Kelas();
+    }
+
     public function profile($nama = "", $kelas = "", $npm = "") 
     {
         $data = [
@@ -19,11 +28,26 @@ class UserController extends Controller
         return view('profile', $data);
     }
 
+    public function index()
+     {
+        $data = [
+        'title' => 'List User',
+        'users' => $this->userModel->getUser(),
+        ];
+        
+        return view('list_user', $data);
+    }
+
     public function create()
     {
-        return view('create_user', [
-            'kelas' => Kelas::all(),
-        ]);
+        $kelas = $this->kelasModel->getKelas();
+
+        $data = [
+            'title' => 'Create User',
+            'kelas' => $kelas,
+        ];
+
+        return view('create_user', $data);
     }
 
     public function store(Request $request)
@@ -36,12 +60,6 @@ class UserController extends Controller
 
         $user = User::create($validatedData);
 
-        $user->load('kelas');
-
-        return view('profile', [
-            'nama' => $user->nama,
-            'npm' => $user->npm,
-            'nama_kelas' => $user->kelas->nama_kelas ?? 'kelas tidak ditemukan',
-        ]);
+        return redirect('/users');
     }
 }
