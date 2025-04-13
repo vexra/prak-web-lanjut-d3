@@ -4,7 +4,7 @@
 <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-10">
     <h2 class="text-2xl font-bold mb-6 text-center">Tambah User</h2>
 
-    <form action="{{ route('user.store') }}" method="POST" class="space-y-4">
+    <form action="{{ route('user.store') }}" method="POST" class="space-y-4" enctype="multipart/form-data">
         @csrf
 
         <div>
@@ -23,6 +23,16 @@
                    class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 focus:border-blue-500"
                    required>
             @error('npm')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div>
+            <label for="foto" class="block text-sm font-medium text-gray-700">foto:</label>
+            <input type="file" id="foto" name="foto" value="{{ old('foto') }}" 
+                   class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300 focus:border-blue-500"
+                   required>
+            @error('foto')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
