@@ -2,44 +2,38 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $table = 'user';
+    protected $guarded = ['id'];
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'nama',
+        'npm',
+        'kelas_id',
+        'foto',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class, 'kelas_id');
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public function getUser($id = null)
+    {
+        if($id != null)
+
+        return $this->join('kelas', 'kelas.id', '=', 'user.kelas_id')
+        ->select('user.*', 'kelas.nama_kelas as nama_kelas')
+         ->where('user.id', $id)
+         ->first();
+
+         return $this->join('kelas', 'kelas.id', '=', 'user.kelas_id')
+     ->select('user.*', 'kelas.nama_kelas as nama_kelas')
+      ->get();
+    }
 }
